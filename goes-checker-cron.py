@@ -68,8 +68,7 @@ Content-Type: text/html
 
 
 
-# new_apt_str = check_output(['phantomjs', '%s/goes-checker.js' % PWD]); # get string from PhantomJS script - formatted like 'July 20, 2015'
-new_apt_str = 'May 2, 2015'
+new_apt_str = check_output(['phantomjs', '%s/goes-checker.js' % PWD]); # get string from PhantomJS script - formatted like 'July 20, 2015'
 new_apt_str = new_apt_str.strip()
 
 try: new_apt = datetime.strptime(new_apt_str, '%B %d, %Y')
