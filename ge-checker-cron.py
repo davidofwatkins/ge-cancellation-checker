@@ -11,7 +11,7 @@ PWD = path.dirname(sys.argv[0])
 
 # Get settings
 try:
-    with open('%s/goes-config.json' % PWD) as json_file:    
+    with open('%s/config.json' % PWD) as json_file:    
         settings = json.load(json_file)
 except Exception as e:
     print 'Error extracting config file: %s' % e
@@ -56,7 +56,7 @@ Content-Type: text/html
 
 <p>If this sounds good, please sign in to https://goes-app.cbp.dhs.gov/main/goes to reschedule.</p>
 
-<p>If you reschedule, please remember to update CURRENT_INTERVIEW_DATE in your goes-config.json file.</p>
+<p>If you reschedule, please remember to update CURRENT_INTERVIEW_DATE in your config.json file.</p>
 """ % (settings['email_from'], ', '.join(settings['email_to']), avail_apt.strftime('%B %d, %Y'), current_apt.strftime('%B %d, %Y'))
 
     try:
@@ -68,7 +68,7 @@ Content-Type: text/html
 
 
 
-new_apt_str = check_output(['phantomjs', '%s/goes-checker.js' % PWD]); # get string from PhantomJS script - formatted like 'July 20, 2015'
+new_apt_str = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % PWD]); # get string from PhantomJS script - formatted like 'July 20, 2015'
 new_apt_str = new_apt_str.strip()
 
 try: new_apt = datetime.strptime(new_apt_str, '%B %d, %Y')

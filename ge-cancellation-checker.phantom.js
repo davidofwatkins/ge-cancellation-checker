@@ -18,9 +18,15 @@ else {
 }
 
 // Gather Settings...
-var settings = JSON.parse(fs.read(PWD + '/goes-config.json'));
-if (!settings.username || !settings.username || !settings.init_url) {
-    console.log('Missing username, password, and/or initial URL. Exiting...');
+try {
+    var settings = JSON.parse(fs.read(PWD + '/config.json'));
+    if (!settings.username || !settings.username || !settings.init_url) {
+        console.log('Missing username, password, and/or initial URL. Exiting...');
+        phantom.exit();
+    }
+}
+catch(e) {
+    console.log('Could not find config.json');
     phantom.exit();
 }
 
