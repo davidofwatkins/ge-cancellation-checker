@@ -30,11 +30,14 @@ if not 'email_to' in settings or not settings['email_to']:
 if not 'init_url' in settings or not settings['init_url']:
     print 'Missing initial URL in config'
     sys.exit()
+if not 'enrollment_location_id' in settings or not settings['enrollment_location_id']:
+    print 'Missing enrollment_location_id in config'
+    sys.exit()
 if not 'username' in settings or not settings['username']:
-    print 'Missing current_interview_date_str in config'
+    print 'Missing username in config'
     sys.exit()
 if not 'password' in settings or not settings['password']:
-    print 'Missing current_interview_date_str in config'
+    print 'Missing password in config'
     sys.exit()
 
 CURRENT_INTERVIEW_DATE = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')

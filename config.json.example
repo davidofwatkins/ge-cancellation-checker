@@ -1,11 +1,12 @@
 {
-    "current_interview_date_str": '',
-    "logfile": '',
+    "current_interview_date_str": "",
+    "logfile": "",
      
-    "email_from": '',
-    "email_to": '',
+    "email_from": "",
+    "email_to": [],
      
-    "username": '', 
-    "password": '',
-    "init_url": "https://goes-app.cbp.dhs.gov/main/goes"
+    "username": "", 
+    "password": "",
+    "enrollment_location_id": "",
+    "init_url": "https://goes-app.cbp.dhs.gov/main/goes",
 }

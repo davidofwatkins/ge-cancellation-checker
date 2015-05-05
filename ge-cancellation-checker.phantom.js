@@ -20,8 +20,8 @@ else {
 // Gather Settings...
 try {
     var settings = JSON.parse(fs.read(PWD + '/config.json'));
-    if (!settings.username || !settings.username || !settings.init_url) {
-        console.log('Missing username, password, and/or initial URL. Exiting...');
+    if (!settings.username || !settings.username || !settings.init_url || !settings.enrollment_location_id) {
+        console.log('Missing username, password, enrollment location ID, and/or initial URL. Exiting...');
         phantom.exit();
     }
 }
@@ -152,7 +152,7 @@ var steps = [
                 el.dispatchEvent(ev);
             }
 
-            document.querySelector('select[name=selectedEnrollmentCenter]').value = '5446'; // SFO!
+            document.querySelector('select[name=selectedEnrollmentCenter]').value = settings.enrollment_location_id.toString();
             fireClick(document.querySelector('input[name=next]'));
             console.log('Choosing SFO...');
         });
