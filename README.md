@@ -14,7 +14,7 @@ Similarly, if you only want to check to see if there is a sooner one than alread
 
 ## Setup ##
 
-Please be aware that you must first sign up and schedule an enrollment appointment via the [GOES website](https://goes-app.cbp.dhs.gov/) before using this script. This does nothing more than check for the first available appointment as you would do manually through a browser like Chrome or Firefox. Also note that because this navigates the GOES website like any other browser any updates to the GOES website may break it.
+Please be aware that you must first sign up and schedule an enrollment appointment via the [GOES website](https://goes-app.cbp.dhs.gov/) before using this script. This does nothing more than check for the first available appointment as you would do manually through a browser like Chrome or Firefox, yourself. Also note that because this navigates the GOES website like any other browser ane updates to the GOES website may break it.
 
 ### Dependencies ###
 
@@ -47,6 +47,8 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
         document.querySelector('select[name=selectedEnrollmentCenter]').value
 
 * **init_url**: the login page of the GOES website.
+
+Please also ensure you are the only one with access to your `config.json` to protect your username and password.
 
 ### Scheduling ###
 
