@@ -1,6 +1,6 @@
 
 // CLI usage:
-// phantomjs [--ssl-protocol=any] goes-checker.js [-v|--verbose]
+// phantomjs [--ssl-protocol=any] ge-cancellation-checker.phantom.js [-v|--verbose]
 
 var system = require('system');
 var fs = require('fs');
@@ -144,7 +144,7 @@ var steps = [
         });
     },
     function() {
-        page.evaluate(function() {
+        page.evaluate(function(location_id) {
 
             function fireClick(el) {
                 var ev = document.createEvent("MouseEvents");
@@ -152,10 +152,10 @@ var steps = [
                 el.dispatchEvent(ev);
             }
 
-            document.querySelector('select[name=selectedEnrollmentCenter]').value = settings.enrollment_location_id.toString();
+            document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
             fireClick(document.querySelector('input[name=next]'));
             console.log('Choosing SFO...');
-        });
+        }, settings.enrollment_location_id.toString());
     },
     function() {
 
