@@ -154,7 +154,9 @@ var steps = [
 
             document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
             fireClick(document.querySelector('input[name=next]'));
-            console.log('Choosing SFO...');
+
+            var location_name = document.querySelector('option[value="' + location_id + '"]').text;
+            console.log('Choosing Location: ' + location_name);
         }, settings.enrollment_location_id.toString());
     },
     function() {
