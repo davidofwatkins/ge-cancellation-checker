@@ -17,7 +17,7 @@ def parseOptions():
     desc = "Checks the GOES website for appointments"
     parser = argparse.ArgumentParser(prog="ge-checker-cron.py", formatter_class=lambda prog: argparse.HelpFormatter(prog, width=170, max_help_position=90), description=desc)
     parser.add_argument("--config", dest="config", default="{0}/config.json".format(PWD), help="Config file to use")
-    parser.add_argument("--no-email", dest="nomail", default=False, help="Don't send mail")
+    parser.add_argument("--no-email", dest="nomail", action="store_true", default=False, help="Don't send mail")
     options = parser.parse_args()
     return options
 # Get settings
