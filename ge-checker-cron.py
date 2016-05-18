@@ -4,14 +4,26 @@
 
 from subprocess import check_output
 from datetime import datetime
-from os import path
+import argparse
+import os
 import sys, smtplib, json
 
-PWD = path.dirname(sys.argv[0]) 
+PWD = os.path.dirname(sys.argv[0])
+if not PWD:
+    PWD = os.getcwd()
 
+# Parse options passed via the command line
+def parseOptions():
+    desc = "Checks the GOES website for appointments"
+    parser = argparse.ArgumentParser(prog="ge-checker-cron.py", formatter_class=lambda prog: argparse.HelpFormatter(prog, width=170, max_help_position=90), description=desc)
+    parser.add_argument("--config", dest="config", default="{0}/config.json".format(PWD), help="Config file to use")
+    parser.add_argument("--no-email", dest="nomail", default=False, help="Don't send mail")
+    options = parser.parse_args()
+    return options
 # Get settings
 try:
-    with open('%s/config.json' % PWD) as json_file:    
+    options = parseOptions()
+    with open(options.config) as json_file:
         settings = json.load(json_file)
 except Exception as e:
     print 'Error extracting config file: %s' % e
@@ -79,7 +91,7 @@ except ValueError as e:
     log('%s' % new_apt_str)
     sys.exit()
 
-if new_apt < CURRENT_INTERVIEW_DATE: # new appointment is newer than existing!
+if new_apt < CURRENT_INTERVIEW_DATE and not options.nomail: # new appointment is newer than existing!
     send_apt_available_email(CURRENT_INTERVIEW_DATE, new_apt)   
     log('Found new appointment on %s (current is on %s)!' % (new_apt, CURRENT_INTERVIEW_DATE))
 else:
