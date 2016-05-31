@@ -38,6 +38,14 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 
 * **email_to**: a list of addresses to send the notifiation email to (must be an array)
 
+* **email_server**: your SMTP server, defaults to localhost
+
+* **email_port**: your SMTP port, defaults to 25, common numbers are 465 for SSL over SMTP
+
+* **email_username**: your SMTP username for authentication
+
+* **email_password**: your SMTP password for authentication
+
 * **username**: the username to log in with on the GOES website
 
 * **password**: the password to log in with on the GOES website

@@ -62,13 +62,19 @@ Content-Type: text/html
 <p>If you reschedule, please remember to update CURRENT_INTERVIEW_DATE in your config.json file.</p>
 """ % (settings['email_from'], ', '.join(settings['email_to']), avail_apt.strftime('%B %d, %Y'), current_apt.strftime('%B %d, %Y'))
 
+
     try:
-        server = smtplib.SMTP('localhost')
+        server = smtplib.SMTP(settings['email_server'], settings['email_port'])
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+	if len(settings['email_username']) > 0:
+        	server.login(settings['email_username'].encode('utf-8'), settings['email_password'].encode('utf-8'))
         server.sendmail(settings['email_from'], settings['email_to'], message)
         server.quit()
     except Exception as e:
         log('Failed to send success email')
-
+	log(e)
 
 
 new_apt_str = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % PWD]); # get string from PhantomJS script - formatted like 'July 20, 2015'
