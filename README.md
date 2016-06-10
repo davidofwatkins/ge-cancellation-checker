@@ -26,6 +26,14 @@ The following must be installed and available in your `$PATH`:
 
 **Note:** Many ISP's block port 25, used for email. If you want to set up email notifications for appointment cancellations and your ISP blocks port 25, a good way around this is to [set up Sendmail to send email through Gmail](http://linuxconfig.org/configuring-gmail-as-sendmail-email-relay).
 
+### Docker ###
+One simple way to run this without installing PhantomJS on your local machine is to use the included DockerFile.
+
+        docker build -t ge-cancellation-checker .
+        cp config.json.example config.json
+        # Make your edits to config.json
+        docker run ge-cancellation-checker
+
 ### Configuration ###
 
 To get started, copy `config.json.example` to `config.json`. In your new config, fill out the following settings:
