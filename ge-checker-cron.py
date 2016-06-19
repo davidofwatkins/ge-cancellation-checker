@@ -2,7 +2,6 @@
 
 # Note: for setting up email with sendmail, see: http://linuxconfig.org/configuring-gmail-as-sendmail-email-relay
 
-
 import argparse
 import commands
 import json
@@ -40,9 +39,9 @@ def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
             server = smtplib.SMTP('localhost', 25)
 
         subject = "Alert: New Global Entry Appointment Available"
-        headers = "\r\n".join(["from: " + sender,
-                               "subject: " + subject,
-                               "to: " + recipient,
+        headers = "\r\n".join(["from: %s" % sender,
+                               "subject: %s" % subject,
+                               "to: %s" % recipient,
                                "mime-version: 1.0",
                                "content-type: text/html"])
         message = EMAIL_TEMPLATE % (avail_apt.strftime('%B %d, %Y'), current_apt.strftime('%B %d, %Y'))
@@ -58,7 +57,7 @@ def notify_osx(msg):
     commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
 
 
-def main(settings, arguments):
+def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
         script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
@@ -72,31 +71,35 @@ def main(settings, arguments):
         logging.info('No new appointments. Next available on %s (current is on %s)' % (new_apt, current_apt))
     else:
         msg = 'Found new appointment on %s (current is on %s)!' % (new_apt, current_apt)
-        logging.info(msg + ' Sending E-mail? %s' % (not arguments.no_email))
+        logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
 
-        if arguments.notify_osx:
+        if settings.get('notify_osx'):
             notify_osx(msg)
-        if not arguments.no_email:
-            notify_send_email(settings, current_apt, new_apt, use_gmail=arguments.use_gmail)
+        if not settings.get('no_email'):
+            notify_send_email(settings, current_apt, new_apt, use_gmail=settings.get('use_gmail'))
 
 
 def _check_settings(config):
     required_settings = (
         'current_interview_date_str',
-        'email_to',
-        'email_from',
-        'email_password',
         'init_url',
         'enrollment_location_id',
         'username',
-        'password',
+        'password'
     )
 
     for setting in required_settings:
         if not config.get(setting):
             raise ValueError('Missing setting %s in config.json file.' % setting)
 
+    if config.get('no_email') == False and not config.get('email_from'): # email_to is not required; will default to email_from if not set
+        raise ValueError('email_to and email_from required for sending email. (Run with --no-email or no_email=True to disable email.)')
+
+    if config.get('use_gmail') and not config.get('email_password'):
+        raise ValueError('email_password not found in config but is required when running with use_gmail option')
+
 if __name__ == '__main__':
+
     # Configure Basic Logging
     logging.basicConfig(
         level=logging.DEBUG,
@@ -105,15 +108,28 @@ if __name__ == '__main__':
         stream=sys.stdout,
     )
 
+    # Parse Arguments
+    parser = argparse.ArgumentParser(description="Command line script to check for Global Entry appointment time slots.")
+    parser.add_argument('--no-email', action='store_true', dest='no_email', default=False, help='Don\'t send an e-mail when the script runs.')
+    parser.add_argument('--use-gmail', action='store_true', dest='use_gmail', default=False, help='Use the gmail SMTP server instead of sendmail.')
+    parser.add_argument('--notify-osx', action='store_true', dest='notify_osx', default=False, help='If better date is found, notify on the osx desktop.')
+    arguments = vars(parser.parse_args())
+
     # Load Settings
     pwd = path.dirname(sys.argv[0])
     try:
         settings_file = '%s/config.json' % pwd
         with open(settings_file) as json_file:
             settings = json.load(json_file)
+
+            # merge args into settings IF they're True
+            for key, val in arguments.iteritems():
+                if not arguments.get(key): continue
+                settings[key] = val
+
             _check_settings(settings)
     except Exception as e:
-        logging.exception('Error loading settings from config.json file')
+        logging.error('Error loading settings from config.json file: %s' % e)
         sys.exit()
 
     # Configure File Logging
@@ -123,15 +139,6 @@ if __name__ == '__main__':
         handler.setLevel(logging.DEBUG)
         logging.getLogger('').addHandler(handler)
 
-    # Parse Arguments
-    parser = argparse.ArgumentParser(description="Command line script to check for Global Entry appointment time slots.")
-    parser.add_argument('--no-email', action='store_true', dest='no_email', default=False, help='Don\'t send an e-mail when the script runs.')
-    parser.add_argument('--use-gmail', action='store_true', dest='use_gmail', default=False, help='Use the gmail SMTP server instead of sendmail.')
-    parser.add_argument('--notify-osx', action='store_true', dest='notify_osx', default=False, help='If better date is found, notify on the osx desktop.')
-    arguments = parser.parse_args()
+    logging.debug('Running GE cron with arguments: %s' % arguments)
 
-    logging.debug('Arguments Provided: %s' % arguments)
-    logging.debug('Loading Settings From: %s' % settings_file)
-    logging.debug('Logging: %s' % settings.get('logfile', 'No Logging Configured.'))
-
-    main(settings, arguments)
+    main(settings)
