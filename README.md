@@ -4,11 +4,15 @@ This allows you to check and set up notifications for Global Entry enrollment ap
 
 Once setup, you can retrieve the soonest available appointment day with the following command:
 
-	phantomjs [--ssl-protocol=any] ge-cancellation-checker.phantom.js [-v | --verbose]
+```bash
+phantomjs [--ssl-protocol=any] ge-cancellation-checker.phantom.js [-v | --verbose]
+```
 
 Similarly, if you only want to check to see if there is a sooner one than already scheduled, run:
 
-	./ge-checker-cron.py [--notify-osx] [--no-email] [--use-gmail] [--config CONFIGFILE]
+```bash
+./ge-checker-cron.py [--notify-osx] [--no-email] [--use-gmail] [--config CONFIGFILE]
+```
 
 (Note that this will send an email notification to the address in your `config.json` if a new appointment is found.)
 
@@ -49,7 +53,7 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 
 * **email_to**: a list of addresses to send the notifiation email to (must be an array)
 
-* **use_gmail** (optional): instead of using sendmail, send the email directly through GMail. This requires the **email_password** config. (This can also be enabled with the `--use-gmail` flag.)
+* **use_gmail** (optional): instead of using sendmail, send the email directly through GMail. This requires the **gmail_password** config. (This can also be enabled with the `--use-gmail` flag.)
 
 * **notify_osx** (optional): if on an OS X machine, notify with system notifications. (This can also be enabled with the `--notify-osx` flag.)
 
@@ -58,8 +62,10 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 * **password**: the password to log in with on the GOES website
 
 * **enrollment_location_id**: the value of the enrollment location that you must choose when setting up your appointment. After choosing from the dropdown, find this ID by running this in the console:
-    
-        document.querySelector('select[name=selectedEnrollmentCenter]').value
+
+    ```js
+    document.querySelector('select[name=selectedEnrollmentCenter]').value
+    ```
 
 * **init_url**: the login page of the GOES website.
 
@@ -73,7 +79,7 @@ If you'd like to be notified of cancellations regularly, you can add the `ge-che
 */30 * * * * /path/to/global-entry-cancellation-checker/ge-checker-cron.py >/dev/null 2>&1
 ```
 
-Of course, please make sure that [SendMail is working](http://smallbusiness.chron.com/check-sendmail-working-not-linux-49904.html) before trusting this to notify you. If you want to keep a record, be sure to set a logfile path in your `config.json`.
+Of course, if using SendMail instead of Gmail (see `use_gmail` above), please make sure that [SendMail is working](http://smallbusiness.chron.com/check-sendmail-working-not-linux-49904.html) before trusting this to notify you. If you want to keep a record, be sure to set a logfile path in your `config.json`.
 
 ## Contribution ##
 

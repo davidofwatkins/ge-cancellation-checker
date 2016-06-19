@@ -24,7 +24,7 @@ EMAIL_TEMPLATE = """
 def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
     sender = settings.get('email_from')
     recipient = settings.get('email_to', sender)  # If recipient isn't provided, send to self.
-    password = settings.get('email_password')
+    password = settings.get('gmail_password')
 
     if not password and use_gmail:
         print 'Trying to send from gmail, but password was not provided.'
@@ -95,8 +95,8 @@ def _check_settings(config):
     if config.get('no_email') == False and not config.get('email_from'): # email_to is not required; will default to email_from if not set
         raise ValueError('email_to and email_from required for sending email. (Run with --no-email or no_email=True to disable email.)')
 
-    if config.get('use_gmail') and not config.get('email_password'):
-        raise ValueError('email_password not found in config but is required when running with use_gmail option')
+    if config.get('use_gmail') and not config.get('gmail_password'):
+        raise ValueError('gmail_password not found in config but is required when running with use_gmail option')
 
 if __name__ == '__main__':
 
