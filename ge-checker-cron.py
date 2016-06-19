@@ -108,18 +108,19 @@ if __name__ == '__main__':
         stream=sys.stdout,
     )
 
+    pwd = path.dirname(sys.argv[0])
+
     # Parse Arguments
     parser = argparse.ArgumentParser(description="Command line script to check for Global Entry appointment time slots.")
     parser.add_argument('--no-email', action='store_true', dest='no_email', default=False, help='Don\'t send an e-mail when the script runs.')
     parser.add_argument('--use-gmail', action='store_true', dest='use_gmail', default=False, help='Use the gmail SMTP server instead of sendmail.')
     parser.add_argument('--notify-osx', action='store_true', dest='notify_osx', default=False, help='If better date is found, notify on the osx desktop.')
+    parser.add_argument('--config', dest='configfile', default='%s/config.json' % pwd, help='Config file to use (default is config.json)')
     arguments = vars(parser.parse_args())
 
     # Load Settings
-    pwd = path.dirname(sys.argv[0])
     try:
-        settings_file = '%s/config.json' % pwd
-        with open(settings_file) as json_file:
+        with open(arguments['configfile']) as json_file:
             settings = json.load(json_file)
 
             # merge args into settings IF they're True
