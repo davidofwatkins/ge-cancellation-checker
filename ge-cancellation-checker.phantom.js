@@ -83,7 +83,10 @@ var steps = [
         page.evaluate(function() {
             console.log('On GOES login page...');
             document.querySelector('input[name=username]').value = window.callPhantom('username');
-            document.querySelector('input[name=password]').value = window.callPhantom('password');
+
+            /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around 
+               this limitation, which causes the fatal error "Unable to find terms acceptance button" */
+            document.querySelector('input[name=password]').value = window.callPhantom('password').substring(0,12);
             document.querySelector('form[action="/pkmslogin.form"]').submit();
             console.log('Logging in...');
         });
