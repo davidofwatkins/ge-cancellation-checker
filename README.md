@@ -2,6 +2,12 @@
 
 This allows you to check and set up notifications for Global Entry enrollment appointment cancellations through the [Global Online Enrollment System website](https://goes-app.cbp.dhs.gov/). It uses [PhantomJS](http://phantomjs.org/), a headless browser, to log in and report back the first available open appointment. If one is found sooner than your current appointment, it will notify you by email. It **does not** make any changes to your account or your appointment.
 
+# Before You Begin...
+
+This started as a fun weekend project with the intention of being used only once. While it's proven to be effective for finding an appointment cancellation, it may be worth simply dropping by your nearest Global Entry application center before taking the trouble to set this up. While an appointment is technically required, interviews are typically very short, and many have reported getting their Global Entry approval before the date of their scheduled interview.
+
+# Running the Script
+
 Once setup, you can retrieve the soonest available appointment day with the following command:
 
 ```bash
@@ -83,7 +89,4 @@ Of course, if using SendMail instead of Gmail (see `use_gmail` above), please ma
 
 ## Contribution ##
 
-If you're interested in contributing, here are a few feature ideas that might improve this:
-
-* Ignored dates: allow the user to provide a list of days for the checker to ignore
-* Plugin system: update `ge-checker-cron.py` to allow configuration for running multiple phantom scripts and keeping track of multiple appointment systems (not just a Global Entry cheker - e.g., the DMV).
+If you're interested in contributing, please take a look at [CONTRIBUTING.md](CONTRIBUTING.md) for welcome improvements and some quick reminders for submitting a pull request. Thanks for the help!
