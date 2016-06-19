@@ -8,7 +8,7 @@ Once setup, you can retrieve the soonest available appointment day with the foll
 
 Similarly, if you only want to check to see if there is a sooner one than already scheduled, run:
 
-	./ge-checker-cron.py
+	./ge-checker-cron.py [--notify-osx] [--no-email] [--use-gmail] [--config CONFIGFILE]
 
 (Note that this will send an email notification to the address in your `config.json` if a new appointment is found.)
 
@@ -27,12 +27,15 @@ The following must be installed and available in your `$PATH`:
 **Note:** Many ISP's block port 25, used for email. If you want to set up email notifications for appointment cancellations and your ISP blocks port 25, a good way around this is to [set up Sendmail to send email through Gmail](http://linuxconfig.org/configuring-gmail-as-sendmail-email-relay).
 
 ### Docker ###
+
 One simple way to run this without installing PhantomJS on your local machine is to use the included DockerFile.
 
-        docker build -t ge-cancellation-checker .
-        cp config.json.example config.json
-        # Make your edits to config.json
-        docker run ge-cancellation-checker
+```bash
+docker build -t ge-cancellation-checker .
+cp config.json.example config.json
+# Make your edits to config.json
+docker run ge-cancellation-checker
+```
 
 ### Configuration ###
 
@@ -45,6 +48,10 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 * **email_from**: the "from" address for the notification email
 
 * **email_to**: a list of addresses to send the notifiation email to (must be an array)
+
+* **use_gmail** (optional): instead of using sendmail, send the email directly through GMail. This requires the **email_password** config. (This can also be enabled with the `--use-gmail` flag.)
+
+* **notify_osx** (optional): if on an OS X machine, notify with system notifications. (This can also be enabled with the `--notify-osx` flag.)
 
 * **username**: the username to log in with on the GOES website
 
@@ -62,7 +69,9 @@ Please also ensure you are the only one with access to your `config.json` to pro
 
 If you'd like to be notified of cancellations regularly, you can add the `ge-checker-cron.py` to your cron file with the `crontab -e` command. The following runs every half hour:
 
-	*/30 * * * * /path/to/global-entry-cancellation-checker/ge-checker-cron.py >/dev/null 2>&1
+```
+*/30 * * * * /path/to/global-entry-cancellation-checker/ge-checker-cron.py >/dev/null 2>&1
+```
 
 Of course, please make sure that [SendMail is working](http://smallbusiness.chron.com/check-sendmail-working-not-linux-49904.html) before trusting this to notify you. If you want to keep a record, be sure to set a logfile path in your `config.json`.
 
@@ -70,6 +79,5 @@ Of course, please make sure that [SendMail is working](http://smallbusiness.chro
 
 If you're interested in contributing, here are a few feature ideas that might improve this:
 
-* Add ability to not send an email when running `go-checker-cron.py` (maybe a `--no-email` flag?)
 * Ignored dates: allow the user to provide a list of days for the checker to ignore
 * Plugin system: update `ge-checker-cron.py` to allow configuration for running multiple phantom scripts and keeping track of multiple appointment systems (not just a Global Entry cheker - e.g., the DMV).
