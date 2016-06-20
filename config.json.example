@@ -12,5 +12,11 @@
     "username": "", 
     "password": "",
     "enrollment_location_id": "",
-    "init_url": "https://goes-app.cbp.dhs.gov/main/goes"
+    "init_url": "https://goes-app.cbp.dhs.gov/main/goes",
+
+    "__comment": "Below are optional:",
+    "use_gmail": false,
+    "gmail_password": "<only required if use_gmail is true>",
+    "no_email": false,                                                                                                                                                
+    "notify_osx": false
 }

@@ -42,6 +42,7 @@ function fireClick(el) {
 }
 
 var page = require('webpage').create();
+page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36';
 
 page.onConsoleMessage = function(msg) {
     if (!VERBOSE) { return; }
@@ -82,7 +83,10 @@ var steps = [
         page.evaluate(function() {
             console.log('On GOES login page...');
             document.querySelector('input[name=username]').value = window.callPhantom('username');
-            document.querySelector('input[name=password]').value = window.callPhantom('password');
+
+            /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around 
+               this limitation, which causes the fatal error "Unable to find terms acceptance button" */
+            document.querySelector('input[name=password]').value = window.callPhantom('password').substring(0,12);
             document.querySelector('form[action="/pkmslogin.form"]').submit();
             console.log('Logging in...');
         });
@@ -154,7 +158,9 @@ var steps = [
 
             document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
             fireClick(document.querySelector('input[name=next]'));
-            console.log('Choosing SFO...');
+
+            var location_name = document.querySelector('option[value="' + location_id + '"]').text;
+            console.log('Choosing Location: ' + location_name);
         }, settings.enrollment_location_id.toString());
     },
     function() {
