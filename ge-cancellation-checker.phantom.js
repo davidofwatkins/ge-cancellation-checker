@@ -65,6 +65,11 @@ page.onCallback = function(query, msg) {
         else { console.log(msg); }
         return;  
     }
+    if (query == 'report-no-interviews') {                                                                                                                                                  
+        if (VERBOSE) { console.log('No new interviews available. Please try again later.'); }
+        else { console.log('None'); }
+        return;
+    }
     if (query == 'fatal-error') {
         console.log('Fatal error: ' + msg);
         phantom.exit();
@@ -167,8 +172,15 @@ var steps = [
 
         page.evaluate(function() {
 
+            // If there are no more appointments available at all, there will be a message saying so.
+            try {
+                if (document.querySelector('span.SectionHeader').innerHTML == 'Appointments are Fully Booked') {
+                    window.callPhantom('report-no-interviews');
+                    return;
+                }
+            } catch(e) { }
+
             // We made it! Now we have to scrape the page for the earliest available date
-            
             var date = document.querySelector('.date table tr:first-child td:first-child').innerHTML;
             var month_year = document.querySelector('.date table tr:last-child td:last-child div').innerHTML;
 

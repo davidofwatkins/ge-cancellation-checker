@@ -61,10 +61,15 @@ def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
         script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
+        
+        if script_output == 'None':
+            logging.info('No appointments available.')
+            return
+
         new_apt = datetime.strptime(script_output, '%B %d, %Y')
     except ValueError:
         logging.exception("Couldn't convert output: {} from phantomJS script into a valid date. ".format(script_output))
-        sys.exit()
+        return
 
     current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
     if new_apt > current_apt:
