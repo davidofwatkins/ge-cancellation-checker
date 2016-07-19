@@ -8,7 +8,7 @@
     "username": "", 
     "password": "",
     "enrollment_location_id": "",
-    "init_url": "https://goes-app.cbp.dhs.gov/main/goes",
+    "init_url": "https://goes-app.cbp.dhs.gov/goes/jsp/login.jsp",
 
     "__comment": "Below are optional:",
     "use_gmail": false,
