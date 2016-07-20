@@ -60,7 +60,8 @@ def notify_osx(msg):
 def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
-        script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
+        # script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
+        script_output = check_output(['phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
         
         if script_output == 'None':
             logging.info('No appointments available.')

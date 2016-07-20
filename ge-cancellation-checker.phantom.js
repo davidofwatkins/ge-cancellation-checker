@@ -87,12 +87,12 @@ var steps = [
     function() { // Log in
         page.evaluate(function() {
             console.log('On GOES login page...');
-            document.querySelector('input[name=username]').value = window.callPhantom('username');
+            document.querySelector('input[name=j_username]').value = window.callPhantom('username');
 
             /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around 
                this limitation, which causes the fatal error "Unable to find terms acceptance button" */
-            document.querySelector('input[name=password]').value = window.callPhantom('password').substring(0,12);
-            document.querySelector('form[action="/pkmslogin.form"]').submit();
+            document.querySelector('input[name=j_password]').value = window.callPhantom('password').substring(0,12);
+            document.querySelector('form[action=j_security_check]').submit();
             console.log('Logging in...');
         });
     },
@@ -105,7 +105,7 @@ var steps = [
                 el.dispatchEvent(ev);
             }
             
-            var $acceptTermsBtn = document.querySelector('a[href="/main/goes/HomePagePreAction.do"]');
+            var $acceptTermsBtn = document.querySelector('a[href="/goes/HomePagePreAction.do"]');
 
             if (!$acceptTermsBtn) {
                 return window.callPhantom('fatal-error', 'Unable to find terms acceptance button');
