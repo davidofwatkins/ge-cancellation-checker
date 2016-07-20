@@ -68,7 +68,10 @@ def main(settings):
 
         new_apt = datetime.strptime(script_output, '%B %d, %Y')
     except ValueError:
-        logging.exception("Couldn't convert output: {} from phantomJS script into a valid date. ".format(script_output))
+        logging.critical("Couldn't convert output: {} from phantomJS script into a valid date. ".format(script_output))
+        return
+    except OSError:
+        logging.critical("Something went wrong when trying to run ge-cancellation-checker.phantom.js. Is phantomjs is installed?")
         return
 
     current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
