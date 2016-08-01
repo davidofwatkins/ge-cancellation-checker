@@ -6,7 +6,7 @@ This allows you to check and set up notifications for Global Entry enrollment ap
 
 This started as a fun weekend project with the intention of being used only once. While it's proven to be effective for finding an appointment cancellation, it may be worth simply dropping by your nearest Global Entry application center before taking the trouble to set this up. While an appointment is technically required, interviews are typically very short, and many have reported getting their Global Entry approval before the date of their scheduled interview.
 
-**Important:** this project is not being actively maintained. If something is not working, pull requests are welcome, but please read [CONTRIBUTING](CONTRIBUTING.md) first!
+_**Important: this project is not being actively maintained. If something is not working, pull requests are welcome, but please read [CONTRIBUTING](CONTRIBUTING.md) first!**_
 
 # Running the Script
 

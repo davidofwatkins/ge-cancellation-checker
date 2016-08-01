@@ -1,7 +1,7 @@
 
-### General Guidelines
+_**Important:** I'm no longer able to maintain this project, as I do not have an active account to test with. That said, GitHub Issues and Pull Requests are welcome. If there is enough peer-review and community support, pull requests may be merged in._
 
-**Important:** I'm no longer able to maintain this project, as I do not have an active account to test with. That said, GitHub Issues and Pull Requests are welcome. If there is enough peer-review and community support, pull requests may be merged in.
+### General Guidelines
 
 If you're interested in contributing, please branch off of and target pull requests for the **`dev`** branch.
 
