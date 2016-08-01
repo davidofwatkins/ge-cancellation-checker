@@ -1,7 +1,9 @@
 
 ### General Guidelines
 
-If you're interested in contributing, please branch off the **`dev`** branch and feel free to submit a pull request to it!
+**Important:** I'm no longer able to maintain this project, as I do not have an active account to test with. That said, GitHub Issues and Pull Requests are welcome. If there is enough peer-review and community support, pull requests may be merged in.
+
+If you're interested in contributing, please branch off of and target pull requests for the **`dev`** branch.
 
 It can be difficult to accurately test for edge cases for users who have already been approved for Global Entry, since it's not possible to schedule an interview if you're already approved. Because of this, please only submit a pull request if you have thoroughly tested your fork.
 

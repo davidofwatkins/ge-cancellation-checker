@@ -6,6 +6,8 @@ This allows you to check and set up notifications for Global Entry enrollment ap
 
 This started as a fun weekend project with the intention of being used only once. While it's proven to be effective for finding an appointment cancellation, it may be worth simply dropping by your nearest Global Entry application center before taking the trouble to set this up. While an appointment is technically required, interviews are typically very short, and many have reported getting their Global Entry approval before the date of their scheduled interview.
 
+**Important:** this project is not being actively maintained. If something is not working, pull requests are welcome, but please read [CONTRIBUTING](CONTRIBUTING.md) first!
+
 # Running the Script
 
 Once setup, you can retrieve the soonest available appointment day with the following command:
@@ -53,7 +55,7 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 
 * **current_interview_date_str**: your currently scheduled interview date, in English (e.g., "September 19, 2015"). **Reminder:** This must be updated every time you reschedule your appointment.
 
-* **logfile**: (optional) the full path to a logfile to be used by `ge-checker-cron.py`. New cancellations, unsuccessful checks, and errors are logged in this file, if provided.
+* **logfile**: (optional) relative path to a logfile to be used by `ge-checker-cron.py`. New cancellations, unsuccessful checks, and errors are logged in this file, if provided.
 
 * **email_from**: the "from" address for the notification email
 
