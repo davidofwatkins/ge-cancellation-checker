@@ -99,20 +99,9 @@ var steps = [
     function() { // Accept terms
         page.evaluate(function() {
             
-            function fireClick(el) {
-                var ev = document.createEvent("MouseEvents");
-                ev.initEvent("click", true, true);
-                el.dispatchEvent(ev);
-            }
-            
-            var $acceptTermsBtn = document.querySelector('a[href="/goes/HomePagePreAction.do"]');
-
-            if (!$acceptTermsBtn) {
-                return window.callPhantom('fatal-error', 'Unable to find terms acceptance button');
-            }
-
-            fireClick($acceptTermsBtn);
-            console.log('Accepting terms...');
+	    submitHome();
+	    
+            console.log('Bypassing human check...');
         });
     },
     function() { // main dashboard
