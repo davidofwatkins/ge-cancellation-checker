@@ -76,7 +76,7 @@ def main(settings):
         return
 
     current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
-    if new_apt > current_apt:
+    if new_apt >= current_apt:
         logging.info('No new appointments. Next available on %s (current is on %s)' % (new_apt, current_apt))
     else:
         msg = 'Found new appointment on %s (current is on %s)!' % (new_apt, current_apt)
