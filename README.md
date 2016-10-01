@@ -77,7 +77,19 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 
 * **init_url**: the login page of the GOES website.
 
+* **twilio_account_sid** (optional): the account SID for your Twilio account, if you want to receive SMS notifications. See [the next section](#twilio-sms-notification) for details.
+
+* **twilio_auth_token** (optional): the auth token for your Twilio account, if you want to receive SMS notifications. See [the next section](#twilio-sms-notification) for details.
+
+* **twilio_from_number** (optional): the phone number from which to send SMS notifications. See [the next section](#twilio-sms-notification) for details.
+
+* **twilio_to_number** (optional): the phone number to which to send SMS notifications – this is probably *your* phone number! See [the next section](#twilio-sms-notification) for details.
+
 Please also ensure you are the only one with access to your `config.json` to protect your username and password.
+
+### Twilio SMS Notification ###
+
+If you'd like to receive SMS notifications in addition to or instead of email notifications, you can do so with [Twilio](https://twilio.com). Create an account and a new SMS enabled sending phone number, then fill in `twilio_account_sid`, `twilio_auth_token`, `twilio_from_number`, and `twilio_to_number` in `config.json`. The from and to phone numbers should be formatted like this: `+18005551234`
 
 ### Scheduling ###
 
