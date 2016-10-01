@@ -18,6 +18,6 @@
 
     "twilio_account_sid": "",
     "twilio_auth_token": "",
-    "twilio_from_number": "",
-    "twilio_to_number": ""
+    "twilio_from_number": "example: +18005551234",
+    "twilio_to_number": "example: +18005551234"
 }
