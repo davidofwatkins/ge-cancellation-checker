@@ -14,6 +14,6 @@ Once contributed code has been tested on `dev` by the community, it will be merg
 If you'd like to help out but aren't sure where to start, here are a few feature ideas that are welcome:
 
 * Ignored dates: allow the user to provide a list of days for the checker to ignore
-* Plugin system: update `ge-checker-cron.py` to allow configuration for running multiple phantom scripts and keeping track of multiple appointment systems (not just a Global Entry cheker - e.g., the DMV).
+* Plugin system: update `ge-checker-cron.py` to allow configuration for running multiple phantom scripts and keeping track of multiple appointment systems (not just a Global Entry checker - e.g., the DMV).
 
 If you have an idea for another great feature or improvement, feel free to open an issue or submit a pull request!
