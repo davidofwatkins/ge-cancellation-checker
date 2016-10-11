@@ -13,6 +13,11 @@
     "__comment": "Below are optional:",
     "use_gmail": false,
     "gmail_password": "<only required if use_gmail is true>",
-    "no_email": false,                                                                                                                                                
-    "notify_osx": false
+    "no_email": false,
+    "notify_osx": false,
+
+    "twilio_account_sid": "",
+    "twilio_auth_token": "",
+    "twilio_from_number": "example: +18005551234",
+    "twilio_to_number": "example: +18005551234"
 }
