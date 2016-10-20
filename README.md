@@ -43,6 +43,11 @@ The following must be installed and available in your `$PATH`:
 One simple way to run this without installing PhantomJS on your local machine is to use the included DockerFile.
 
 ```bash
+# If not already cloned:
+git clone https://github.com/davidofwatkins/ge-cancellation-checker.git
+cd ge-cancellation-checker
+
+# Run Docker
 git clone https://github.com/davidofwatkins/ge-cancellation-checker.git
 cp config.json.example config.json
 # Make your edits to config.json
