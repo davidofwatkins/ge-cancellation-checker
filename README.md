@@ -48,7 +48,6 @@ git clone https://github.com/davidofwatkins/ge-cancellation-checker.git
 cd ge-cancellation-checker
 
 # Run Docker
-git clone https://github.com/davidofwatkins/ge-cancellation-checker.git
 cp config.json.example config.json
 # Make your edits to config.json
 docker build -t ge-cancellation-checker .
