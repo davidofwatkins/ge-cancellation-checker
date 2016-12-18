@@ -17,23 +17,33 @@ else {
     PWD = current_path_arr.join('/');
 }
 
-// Gather Settings...
+
+
+// ...from command
+var configFile = PWD + '/config.json'
+system.args.forEach(function(val, i) {
+    if (val == '-v' || val == '--verbose') { VERBOSE = true; }
+    if (val == '--config') {
+	if (system.args.length == i) console.log('failed to set config - no option given');
+	else {
+	    configFile = system.args[i+1];
+	}
+    }
+});
+
+
 try {
-    var settings = JSON.parse(fs.read(PWD + '/config.json'));
+    var settings = JSON.parse(fs.read(configFile));
     if (!settings.username || !settings.username || !settings.init_url || !settings.enrollment_location_id) {
         console.log('Missing username, password, enrollment location ID, and/or initial URL. Exiting...');
         phantom.exit();
     }
 }
 catch(e) {
-    console.log('Could not find config.json');
+    console.log('Could not find ' + configFile);
     phantom.exit();
 }
 
-// ...from command
-system.args.forEach(function(val, i) {
-    if (val == '-v' || val == '--verbose') { VERBOSE = true; }
-});
 
 function fireClick(el) {
     var ev = document.createEvent("MouseEvents");
