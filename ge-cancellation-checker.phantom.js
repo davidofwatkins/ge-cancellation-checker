@@ -92,7 +92,7 @@ var steps = [
             /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around
                this limitation, which causes the fatal error "Unable to find terms acceptance button" */
             document.querySelector('input[name=j_password]').value = window.callPhantom('password').substring(0,12);
-            document.querySelector('form[action=j_security_check]').submit();
+            document.querySelector('form[action="/goes/security_check"]').submit();
             console.log('Logging in...');
         });
     },
@@ -149,11 +149,9 @@ var steps = [
                 ev.initEvent("click", true, true);
                 el.dispatchEvent(ev);
             }
-
-            document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
-            fireClick(document.querySelector('input[name=next]'));
-
-            var location_name = document.querySelector('option[value="' + location_id + '"]').text;
+            var location_name = document.querySelector('input[name="selectedEnrollmentCenter"][value="'+ location_id +'"]')
+            location_name.setAttribute('checked', true);
+            submitApplicationActionForm('next');
             console.log('Choosing Location: ' + location_name);
         }, settings.enrollment_location_id.toString());
     },
