@@ -73,9 +73,9 @@ page.onCallback = function(query, msg) {
     if (query == 'report-interview-time') {
         if (VERBOSE) { console.log('Next available appointment is at: ' + msg); }
         else { console.log(msg); }
-        return;  
+        return;
     }
-    if (query == 'report-no-interviews') {                                                                                                                                                  
+    if (query == 'report-no-interviews') {
         if (VERBOSE) { console.log('No new interviews available. Please try again later.'); }
         else { console.log('None'); }
         return;
@@ -99,18 +99,18 @@ var steps = [
             console.log('On GOES login page...');
             document.querySelector('input[name=j_username]').value = window.callPhantom('username');
 
-            /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around 
+            /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around
                this limitation, which causes the fatal error "Unable to find terms acceptance button" */
             document.querySelector('input[name=j_password]').value = window.callPhantom('password').substring(0,12);
-            document.querySelector('form[action=j_security_check]').submit();
+            document.querySelector('form[action="/goes/security_check"]').submit();
             console.log('Logging in...');
         });
     },
     function() { // Accept terms
         page.evaluate(function() {
-            
+
 	    submitHome();
-	    
+
             console.log('Bypassing human check...');
         });
     },
@@ -122,7 +122,7 @@ var steps = [
                 ev.initEvent("click", true, true);
                 el.dispatchEvent(ev);
             }
-            
+
             var $manageAptBtn = document.querySelector('.bluebutton[name=manageAptm]');
             if (!$manageAptBtn) {
                 return window.callPhantom('fatal-error', 'Unable to find Manage Appointment button');
@@ -140,9 +140,9 @@ var steps = [
                 ev.initEvent("click", true, true);
                 el.dispatchEvent(ev);
             }
-            
+
             var $rescheduleBtn = document.querySelector('input[name=reschedule]');
-    
+
             if (!$rescheduleBtn) {
                 return window.callPhantom('fatal-error', 'Unable to find reschedule button. Is it after or less than 24 hrs before your appointment?');
             }
@@ -160,10 +160,16 @@ var steps = [
                 el.dispatchEvent(ev);
             }
 
-            document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
+            var elements = document.getElementsByName('selectedEnrollmentCenter');
+            for (i = 0; i < elements.length; i++) {
+                if (elements[i].value == location_id) {
+                    elements[i].checked = true;
+                    var location_name = elements[i].title;
+                }
+            }
+
             fireClick(document.querySelector('input[name=next]'));
 
-            var location_name = document.querySelector('option[value="' + location_id + '"]').text;
             console.log('Choosing Location: ' + location_name);
         }, settings.enrollment_location_id.toString());
     },
