@@ -17,23 +17,33 @@ else {
     PWD = current_path_arr.join('/');
 }
 
-// Gather Settings...
+
+
+// ...from command
+var configFile = PWD + '/config.json'
+system.args.forEach(function(val, i) {
+    if (val == '-v' || val == '--verbose') { VERBOSE = true; }
+    if (val == '--config') {
+	if (system.args.length == i) console.log('failed to set config - no option given');
+	else {
+	    configFile = system.args[i+1];
+	}
+    }
+});
+
+
 try {
-    var settings = JSON.parse(fs.read(PWD + '/config.json'));
+    var settings = JSON.parse(fs.read(configFile));
     if (!settings.username || !settings.password || !settings.init_url || !settings.enrollment_location_id) {
         console.log('Missing username, password, enrollment location ID, and/or initial URL. Exiting...');
         phantom.exit();
     }
 }
 catch(e) {
-    console.log('Could not find config.json');
+    console.log('Could not find ' + configFile);
     phantom.exit();
 }
 
-// ...from command
-system.args.forEach(function(val, i) {
-    if (val == '-v' || val == '--verbose') { VERBOSE = true; }
-});
 
 function fireClick(el) {
     var ev = document.createEvent("MouseEvents");
@@ -92,7 +102,7 @@ var steps = [
             /* The GE Login page limits passwords to only 12 characters, but phantomjs can get around
                this limitation, which causes the fatal error "Unable to find terms acceptance button" */
             document.querySelector('input[name=j_password]').value = window.callPhantom('password').substring(0,12);
-            document.querySelector('form[action=j_security_check]').submit();
+            document.querySelector('form[action="/goes/security_check"]').submit();
             console.log('Logging in...');
         });
     },
@@ -150,10 +160,16 @@ var steps = [
                 el.dispatchEvent(ev);
             }
 
-            document.querySelector('select[name=selectedEnrollmentCenter]').value = location_id;
+            var elements = document.getElementsByName('selectedEnrollmentCenter');
+            for (i = 0; i < elements.length; i++) {
+                if (elements[i].value == location_id) {
+                    elements[i].checked = true;
+                    var location_name = elements[i].title;
+                }
+            }
+
             fireClick(document.querySelector('input[name=next]'));
 
-            var location_name = document.querySelector('option[value="' + location_id + '"]').text;
             console.log('Choosing Location: ' + location_name);
         }, settings.enrollment_location_id.toString());
     },

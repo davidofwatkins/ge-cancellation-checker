@@ -27,7 +27,7 @@ def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
     password = settings.get('gmail_password')
 
     if not password and use_gmail:
-        print 'Trying to send from gmail, but password was not provided.'
+        logging.warning('Trying to send from gmail, but password was not provided.')
         return
 
     try:
@@ -57,11 +57,36 @@ def notify_osx(msg):
     commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
 
 
+def notify_sms(settings, avail_apt):
+    try:
+        from twilio.rest import TwilioRestClient
+    except ImportError:
+        logging.warning('Trying to send SMS, but TwilioRestClient not installed. Try \'pip install twilio\'')
+        return
+
+    try:
+        account_sid = settings['twilio_account_sid']
+        auth_token = settings['twilio_auth_token']
+        from_number = settings['twilio_from_number']
+        to_number = settings['twilio_to_number']
+        assert account_sid and auth_token and from_number and to_number
+    except (KeyError, AssertionError):
+        logging.warning('Trying to send SMS, but one of the required Twilio settings is missing or empty')
+        return
+
+    # Twilio logs annoyingly, silence that
+    logging.getLogger('twilio').setLevel(logging.WARNING)
+    client = TwilioRestClient(account_sid, auth_token)
+    body = 'New appointment available on %s' % avail_apt.strftime('%B %d, %Y')
+    logging.info('Sending SMS.')
+    client.messages.create(body=body, to=to_number, from_=from_number)
+
+
 def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
         # script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
-        script_output = check_output(['phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
+        script_output = check_output(['phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd, '--config', settings.get('configfile')]).strip()
         
         if script_output == 'None':
             logging.info('No appointments available.')
@@ -77,15 +102,17 @@ def main(settings):
 
     current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
     if new_apt > current_apt:
-        logging.info('No new appointments. Next available on %s (current is on %s)' % (new_apt, current_apt))
+        logging.info('No new appointments. Next available in location %s on %s (current is on %s)' % (settings.get("enrollment_location_id"), new_apt, current_apt))
     else:
-        msg = 'Found new appointment on %s (current is on %s)!' % (new_apt, current_apt)
+        msg = 'Found new appointment in location %s on %s (current is on %s)!' % (settings.get("enrollment_location_id"), new_apt, current_apt)
         logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
 
         if settings.get('notify_osx'):
             notify_osx(msg)
         if not settings.get('no_email'):
             notify_send_email(settings, current_apt, new_apt, use_gmail=settings.get('use_gmail'))
+        if settings.get('twilio_account_sid'):
+            notify_sms(settings, new_apt)
 
 
 def _check_settings(config):
@@ -112,7 +139,7 @@ if __name__ == '__main__':
     # Configure Basic Logging
     logging.basicConfig(
         level=logging.DEBUG,
-        format='%(asctime)s %(message)s',
+        format='%(levelname)s: %(asctime)s %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         stream=sys.stdout,
     )
@@ -126,7 +153,7 @@ if __name__ == '__main__':
     parser.add_argument('--notify-osx', action='store_true', dest='notify_osx', default=False, help='If better date is found, notify on the osx desktop.')
     parser.add_argument('--config', dest='configfile', default='%s/config.json' % pwd, help='Config file to use (default is config.json)')
     arguments = vars(parser.parse_args())
-
+    logging.info("config file is:" + arguments['configfile'])
     # Load Settings
     try:
         with open(arguments['configfile']) as json_file:
@@ -136,7 +163,8 @@ if __name__ == '__main__':
             for key, val in arguments.iteritems():
                 if not arguments.get(key): continue
                 settings[key] = val
-
+            
+            settings['configfile'] = arguments['configfile']
             _check_settings(settings)
     except Exception as e:
         logging.error('Error loading settings from config.json file: %s' % e)
@@ -145,7 +173,7 @@ if __name__ == '__main__':
     # Configure File Logging
     if settings.get('logfile'):
         handler = logging.FileHandler('%s/%s' % (pwd, settings.get('logfile')))
-        handler.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+        handler.setFormatter(logging.Formatter('%(levelname)s: %(asctime)s %(message)s'))
         handler.setLevel(logging.DEBUG)
         logging.getLogger('').addHandler(handler)
 
