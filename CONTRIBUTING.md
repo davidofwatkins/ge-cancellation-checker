@@ -3,11 +3,9 @@ _**Important:** I'm no longer able to maintain this project, as I do not have an
 
 ### General Guidelines
 
-If you're interested in contributing, please branch off of and target pull requests for the **`dev`** branch.
+Please target pull requests to the `master`.
 
 It can be difficult to accurately test for edge cases for users who have already been approved for Global Entry, since it's not possible to schedule an interview if you're already approved. Because of this, please only submit a pull request if you have thoroughly tested your fork.
-
-Once contributed code has been tested on `dev` by the community, it will be merged into `master`.
 
 ### Ideas & Feature Requests
 
