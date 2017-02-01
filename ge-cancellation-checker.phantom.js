@@ -24,10 +24,10 @@ var configFile = PWD + '/config.json'
 system.args.forEach(function(val, i) {
     if (val == '-v' || val == '--verbose') { VERBOSE = true; }
     if (val == '--config') {
-	if (system.args.length == i) console.log('failed to set config - no option given');
-	else {
-	    configFile = system.args[i+1];
-	}
+    if (system.args.length == i) console.log('failed to set config - no option given');
+    else {
+        configFile = system.args[i+1];
+    }
     }
 });
 
@@ -109,7 +109,7 @@ var steps = [
     function() { // Accept terms
         page.evaluate(function() {
 
-	    submitHome();
+        submitHome();
 
             console.log('Bypassing human check...');
         });
