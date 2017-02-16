@@ -36,7 +36,7 @@ def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
             server.starttls()
             server.login(sender, password)
         else:
-            server = smtplib.SMTP('localhost', 25)
+            server = smtplib.SMTP(settings.get('email_host', 'localhost'), settings.get('email_port', 25))
 
         subject = "Alert: New Global Entry Appointment Available"
         headers = "\r\n".join(["from: %s" % sender,
