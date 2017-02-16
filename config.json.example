@@ -4,6 +4,8 @@
      
     "email_from": "",
     "email_to": [],
+    "email_host": "localhost",
+    "email_port": 25,
 
     "username": "", 
     "password": "",
