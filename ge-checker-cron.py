@@ -24,19 +24,25 @@ EMAIL_TEMPLATE = """
 def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
     sender = settings.get('email_from')
     recipient = settings.get('email_to', sender)  # If recipient isn't provided, send to self.
-    password = settings.get('gmail_password')
-
-    if not password and use_gmail:
-        logging.warning('Trying to send from gmail, but password was not provided.')
-        return
 
     try:
         if use_gmail:
+            password = settings.get('gmail_password')
+            if not password:
+                logging.warning('Trying to send from gmail, but password was not provided.')
+                return
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
             server.login(sender, password)
         else:
-            server = smtplib.SMTP('localhost', 25)
+            username = settings.get('email_username').encode('utf-8')
+            password = settings.get('email_password').encode('utf-8')
+            server = smtplib.SMTP(settings.get('email_server'), settings.get('email_port'))
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            if username:
+                    server.login(username, password)
 
         subject = "Alert: New Global Entry Appointment Available"
         headers = "\r\n".join(["from: %s" % sender,
@@ -51,6 +57,7 @@ def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
         server.quit()
     except Exception:
         logging.exception('Failed to send succcess e-mail.')
+        log(e)
 
 
 def notify_osx(msg):

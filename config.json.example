@@ -4,7 +4,11 @@
      
     "email_from": "",
     "email_to": [],
-
+    "email_server": "localhost",
+    "email_port": 25,
+    "email_username": "",
+    "email_password": "",
+     
     "username": "", 
     "password": "",
     "enrollment_location_id": "",
