@@ -12,6 +12,7 @@ import sys
 from datetime import datetime
 from os import path
 from subprocess import check_output
+from distutils.spawn import find_executable
 
 
 EMAIL_TEMPLATE = """
@@ -93,7 +94,14 @@ def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
         # script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
-        script_output = check_output(['phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd, '--config', settings.get('configfile')]).strip()
+
+        # determine phantomjs or fail
+        cmd = find_executable('phantomjs') or find_executable('/usr/local/bin/phantomjs')
+        if not cmd:
+            logging.critical('Cannot find phantomjs. Make sure it is in your path.')
+            return
+
+        script_output = check_output([cmd, '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd, '--config', settings.get('configfile')]).strip()
         
         if script_output == 'None':
             logging.info('No appointments available.')
