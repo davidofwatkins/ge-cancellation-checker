@@ -54,14 +54,15 @@ def notify_send_email(settings, current_apt, avail_apt, use_gmail=False):
 
 
 def notify_osx(msg):
-    commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
+#    commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
+    commands.getstatusoutput("/usr/bin/open -a '/Applications/Google Chrome.app' 'http://google.com/?q=%s'" % msg)
 
 
 def main(settings):
     try:
         # Run the phantom JS script - output will be formatted like 'July 20, 2015'
         # script_output = check_output(['phantomjs', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
-        script_output = check_output(['phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
+        script_output = check_output(['./phantomjs', '--ssl-protocol=any', '%s/ge-cancellation-checker.phantom.js' % pwd]).strip()
         
         if script_output == 'None':
             logging.info('No appointments available.')
@@ -75,17 +76,30 @@ def main(settings):
         logging.critical("Something went wrong when trying to run ge-cancellation-checker.phantom.js. Is phantomjs is installed?")
         return
 
+    logging.info(script_output)
+
     current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
     if new_apt > current_apt:
         logging.info('No new appointments. Next available on %s (current is on %s)' % (new_apt, current_apt))
     else:
-        msg = 'Found new appointment on %s (current is on %s)!' % (new_apt, current_apt)
-        logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
+        f = open('blacklist.txt', 'r')
+        blacklist = f.read()
+        f.close()
+        new_apt_time = new_apt.strftime("%A %d %B %Y")
+        if new_apt_time in blacklist:
+            logging.info('Ignoring %s as it is in the blacklist.' % (new_apt_time))
+        else:
+            msg = 'Found new appointment on %s!' % (new_apt_time)
+            logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
 
-        if settings.get('notify_osx'):
-            notify_osx(msg)
-        if not settings.get('no_email'):
-            notify_send_email(settings, current_apt, new_apt, use_gmail=settings.get('use_gmail'))
+            if settings.get('notify_osx'):
+                notify_osx(msg)
+            if not settings.get('no_email'):
+                notify_send_email(settings, current_apt, new_apt, use_gmail=settings.get('use_gmail'))
+
+            f2 = open('blacklist.txt', 'a')
+            f2.write(new_apt_time + "\n")
+            f2.close()
 
 
 def _check_settings(config):
@@ -108,7 +122,6 @@ def _check_settings(config):
         raise ValueError('gmail_password not found in config but is required when running with use_gmail option')
 
 if __name__ == '__main__':
-
     # Configure Basic Logging
     logging.basicConfig(
         level=logging.DEBUG,
