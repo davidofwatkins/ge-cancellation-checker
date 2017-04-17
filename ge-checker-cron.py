@@ -67,7 +67,7 @@ def notify_osx(msg):
 
 def notify_sms(settings, avail_apt):
     try:
-        from twilio.rest import TwilioRestClient
+        from twilio.rest import Client
     except ImportError:
         logging.warning('Trying to send SMS, but TwilioRestClient not installed. Try \'pip install twilio\'')
         return
@@ -84,7 +84,7 @@ def notify_sms(settings, avail_apt):
 
     # Twilio logs annoyingly, silence that
     logging.getLogger('twilio').setLevel(logging.WARNING)
-    client = TwilioRestClient(account_sid, auth_token)
+    client = Client(account_sid, auth_token)
     body = 'New appointment available on %s' % avail_apt.strftime('%B %d, %Y')
     logging.info('Sending SMS.')
     client.messages.create(body=body, to=to_number, from_=from_number)
