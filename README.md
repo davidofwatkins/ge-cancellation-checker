@@ -1,3 +1,8 @@
+
+# Deprecation Notice:
+
+_This tool is no longer functional and is no longer being maintained. Instead, please use @Drewster727's newer and lighter-weight [goes-notify](Drewster727)! For more information, see #41._
+
 # Global Entry Appointment Cancellation Checker #
 
 This allows you to check and set up notifications for Global Entry enrollment appointment cancellations through the [Global Online Enrollment System website](https://goes-app.cbp.dhs.gov/). It uses [PhantomJS](http://phantomjs.org/), a headless browser, to log in and report back the first available open appointment. If one is found sooner than your current appointment, it will notify you by email. It **does not** make any changes to your account or your appointment.
@@ -5,8 +10,6 @@ This allows you to check and set up notifications for Global Entry enrollment ap
 # Before You Begin...
 
 This started as a fun weekend project with the intention of being used only once. While it's proven to be effective for finding an appointment cancellation, it may be worth simply dropping by your nearest Global Entry application center before taking the trouble to set this up. While an appointment is technically required, interviews are typically very short, and many have reported getting their Global Entry approval before the date of their scheduled interview.
-
-_**Important: this project is not being actively maintained. If something is not working, pull requests are welcome, but please read [CONTRIBUTING](CONTRIBUTING.md) first!**_
 
 # Running the Script
 
