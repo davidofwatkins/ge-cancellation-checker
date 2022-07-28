@@ -103,6 +103,10 @@ To get started, copy `config.json.example` to `config.json`. In your new config,
 
 Please also ensure you are the only one with access to your `config.json` to protect your username and password.
 
+### Simultaneous multiple location checking ###
+
+If you would like to check multiple nearby locations at once you need to make copies the original file you just edited and change the location code on each config file. Then in seperate windows run each copy of the diffrent locations.
+
 ### Twilio SMS Notification ###
 
 If you'd like to receive SMS notifications in addition to or instead of email notifications, you can do so with [Twilio](https://twilio.com). Create an account and a new SMS enabled sending phone number, then fill in `twilio_account_sid`, `twilio_auth_token`, `twilio_from_number`, and `twilio_to_number` in `config.json`. The from and to phone numbers should be formatted like this: `+18005551234`. You'll also need to install the `twilio` Python package, with `pip install twilio`.
