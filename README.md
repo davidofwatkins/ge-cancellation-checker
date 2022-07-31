@@ -1,7 +1,7 @@
 
-# Deprecation Notice:
+# ⚠️ Deprecation Notice:
 
-_This tool is no longer functional and is no longer being maintained. Instead, please use [@Drewster727](https://github.com/Drewster727)'s newer and lighter-weight [goes-notify](https://github.com/Drewster727/goes-notify)! For more information, see [#41](https://github.com/davidofwatkins/ge-cancellation-checker/issues/41)._
+> **Warning** **This tool is no longer functional and is no longer being maintained. Instead, please use [@Drewster727](https://github.com/Drewster727)'s newer and lighter-weight [goes-notify](https://github.com/Drewster727/goes-notify)! For more information, see [#41](https://github.com/davidofwatkins/ge-cancellation-checker/issues/41).**
 
 # Global Entry Appointment Cancellation Checker #
 
